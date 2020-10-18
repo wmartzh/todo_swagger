@@ -3,8 +3,11 @@ require("dotenv").config({ path: "./.env" });
 const express = require("express");
 const connection = require("./mongo");
 
+
 const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
+
+const router = require('./api/router');
 
 const options = {
 	definition: {
@@ -23,7 +26,7 @@ const options = {
 		},
 		servers: [
 			{
-				url: "http://localhost:"+ process.env.PORT+"/books",
+				url: "http://localhost:"+ process.env.PORT+"/v1",
 			},
 		],
 	},
@@ -32,8 +35,10 @@ const options = {
 
 app = express();
 
+
 const especs =swaggerJsdoc(options)
 
+app.use('/v1',router)
 
 app.use("/docs",swaggerUi.serve,swaggerUi.setup(especs))
 connection();
